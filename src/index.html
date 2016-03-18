@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>JsGame</title>
+        <script src="libs/createjs.min.js"></script>
+        <script>
+            var KEYCODE = {
+                LEFT: 37,
+                RIGHT: 39,
+                UP: 38,
+                DOWN: 40
+            }
+            
+            var velocity = 3;
+            var stage;
+            var stageSize = {
+                width: 500,
+                height: 400
+            }
+            
+            var circle;
+            var shooter;
+            var shooterSize = {
+                width: 20,
+                height: 10
+            }
+            
+            document.onkeydown = handleKeys;
+            
+            function handleKeys(event) {
+                switch(event.keyCode) {
+                    case KEYCODE.LEFT:	
+                        moveShooter(-1);
+                        break;
+                    case KEYCODE.RIGHT:                     
+                        moveShooter(1);
+                        break;
+                    case KEYCODE.UP: 
+                        // circle.y -= velocity;
+                        break;
+                    case KEYCODE.DOWN: 
+                        // circle.y += velocity;
+                        break;
+                }
+                
+                stage.update();
+            }            
+            
+            function init() {
+                stage = new createjs.Stage("demoCanvas");
+                stage.canvas.width = stageSize.width;
+                stage.canvas.height = stageSize.height;
+                
+                initShooter();
+                      
+                stage.addChild(shooter);
+                createjs.Ticker.setFPS(60);
+                createjs.Ticker.addEventListener("tick", stage);
+                
+            }
+            
+            function initShooter() {                
+                shooter = new createjs.Shape();
+                shooter.graphics.beginFill("DeepSkyBlue")
+                    .drawRect(7, 0, 6, 5).drawRect(0, 5, 20, 5);
+                    
+                shooter.x = (stageSize.width / 2) - (shooterSize.width / 2);
+                shooter.y =  stageSize.height - shooterSize.height - 10;
+            }
+            
+            function moveShooter(direction) {
+                if (direction > 0 && shooter.x + shooterSize.width < stageSize.width)
+                    shooter.x += velocity;
+                else if(direction < 0 && shooter.x > 0)
+                    shooter.x += velocity * direction;
+            }
+        </script>
+    </head>
+    <body onload="init();">
+        <canvas id="demoCanvas"></canvas>
+    </body>
+</html>
