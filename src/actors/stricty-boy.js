@@ -5,7 +5,7 @@ var StrictyBoy = (function() {
         height: 30
     };
         
-    var velocity = 3;
+    var velocity = 10;
     
     function StrictyBoy(stageSize, size) {
         this.shape = new createjs.Shape();
@@ -34,6 +34,20 @@ var StrictyBoy = (function() {
             this.shape.x -= velocity;
         else
             this.shape.x = 0; 
+    }
+    
+    StrictyBoy.prototype.moveUp = function() {
+        if (this.shape.y > velocity)
+            this.shape.y -= velocity;
+        else
+            this.shape.y = 0; 
+    }
+    
+    StrictyBoy.prototype.moveDown = function() {
+        if (this.shape.y + this.size.height < this._stageSize.height)
+            this.shape.y += velocity;
+        else 
+            this.shape.y = this._stageSize.height - this.size.height;
     }
     
     return StrictyBoy;

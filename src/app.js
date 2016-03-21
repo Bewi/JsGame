@@ -35,6 +35,14 @@ function initActionsKeyMap() {
         39: {
             actor: strictyBoy,
             action: strictyBoy.moveRight
+        },
+        38: {
+            actor: strictyBoy,
+            action: strictyBoy.moveUp
+        },
+        40: {
+            actor: strictyBoy,
+            action: strictyBoy.moveDown
         }
     }
 }
