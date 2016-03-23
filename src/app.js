@@ -60,8 +60,7 @@ function tickEvent(event){
 }
 
 function handleMouseDown(event){
-    strictyBoy.gun.rotation += 10;
-    stage.update(event);
+    
 }
 
 function handleMouseUp(event){
@@ -71,6 +70,14 @@ function handleMouseUp(event){
 function handleMouseMove(event){
     gunScope.x = stage.mouseX;
 	gunScope.y = stage.mouseY;
+
+    var coteX = stage.mouseX - strictyBoy.gun.x;
+    var coteY = strictyBoy.gun.y - stage.mouseY;
+    var angle = Math.atan(coteX/coteY) * (180 / Math.PI);
+    if (coteY < 0){
+        angle = 180 + angle;
+    }
+    strictyBoy.gun.rotation = angle;
 
     stage.update();
 }
