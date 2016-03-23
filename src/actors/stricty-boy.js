@@ -6,16 +6,23 @@ var StrictyBoy = (function() {
         width: 20,
         height: 30
     };
+    
+    var defaultGunSize = {
+        width: 6,
+        height: 40
+    };
         
     var velocity = 10;
     var goUp;
     var goDown;
     var goRight;
     var goLeft;
+    var gun;
     
     // Constructor
     function StrictyBoy(stageSize, size) {
         this.shape = new createjs.Shape();
+        this.gun = new createjs.Shape();
         this.size = size || { width: defaultSize.width, height: defaultSize.height };
         this._stageSize = stageSize;
         this.goUp = this.goDown = this.goRight = this.goLeft = false;
@@ -23,12 +30,21 @@ var StrictyBoy = (function() {
     
     // Initialisation
     StrictyBoy.prototype.init = function() {
+        // StrictyBoy
         this.shape.graphics
             .beginFill("DeepSkyBlue")
             .drawRect(0, 0, this.size.width, this.size.height);
                 
         this.shape.x = (this._stageSize.width / 2) - (this.size.width / 2);
         this.shape.y =  this._stageSize.height - this.size.height - 10;    
+            
+        // Gun         
+        this.gun.graphics
+            .beginFill("#123456")
+            .drawRect(0, 0, defaultGunSize.width, defaultGunSize.height);     
+        
+        this.gun.x = this.shapeCenterX - (defaultGunSize.width/2);
+        this.gun.y = this.shapeCenterY - (defaultGunSize.height);    
     } 
     
     // Starting to move on a direction
@@ -48,29 +64,42 @@ var StrictyBoy = (function() {
         
         // Vertical movement
         if(goUp){
-            if (this.shape.y > velocity)
+            if (this.shape.y > velocity){
                 this.shape.y -= velocity;
-            else
+                this.gun.y -= velocity;
+            } else {
                 this.shape.y = 0; 
+                this.gun.y = (this.size.height / 2) - (defaultGunSize.height); 
+            }                
         }else if(goDown){
-            if (this.shape.y + this.size.height < this._stageSize.height)
-                this.shape.y += velocity;
-            else 
+            if (this.shape.y + this.size.height < this._stageSize.height){
+                 this.shape.y += velocity;
+                 this.gun.y += velocity;
+            } else {
                 this.shape.y = this._stageSize.height - this.size.height;
+                this.gun.y = this._stageSize.height - (this.size.height / 2) - (defaultGunSize.height);
+            }                
         }
         
         // Horizontal movement
         if(goRight){
             if (this.shape.x + this.size.width < this._stageSize.width)
+            {
                 this.shape.x += velocity;
-            else 
+                this.gun.x += velocity;
+            } else {
                 this.shape.x = this._stageSize.width - this.size.width;
+                this.gun.x = this._stageSize.width - (this.size.width / 2) - (defaultGunSize.width/2);
+            }
         }else if(goLeft){
-            if (this.shape.x > velocity)
+            if (this.shape.x > velocity){
                 this.shape.x -= velocity;
-            else
+                this.gun.x -= velocity;
+            } else {
                 this.shape.x = 0; 
-        }       
+                this.gun.x = (this.size.width / 2) - (defaultGunSize.width/2); 
+            }                
+        }                
     }
     
     return StrictyBoy;

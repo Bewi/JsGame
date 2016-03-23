@@ -16,6 +16,8 @@ var stageSize = {
     height: 400
 }
 
+var gunScope;
+var gunDirection;
 var strictyBoy;
 var actionsKeyMap;
 
@@ -27,10 +29,20 @@ function init() {
     stage.canvas.width = stageSize.width;
     stage.canvas.height = stageSize.height;
     
+    stage.addEventListener("stagemousedown", handleMouseDown);
+	stage.addEventListener("stagemouseup", handleMouseUp);
+	stage.addEventListener("stagemousemove", handleMouseMove);
+    
     strictyBoy = new StrictyBoy(stageSize); // stageSize, size
-    strictyBoy.init();                
-                    
+    strictyBoy.init();
     stage.addChild(strictyBoy.shape);
+    stage.addChild(strictyBoy.gun);
+        
+    // Gun scope    
+	gunScope = new createjs.Shape(new createjs.Graphics().beginFill("#123456").drawCircle(0, 0, 10));
+	gunScope.cursor = "pointer";
+	stage.addChild(gunScope);
+    
     stage.update();
     initActionsKeyMap();
     
@@ -45,6 +57,21 @@ function init() {
 function tickEvent(event){
     strictyBoy.tickEvent(event);
     stage.update(event);
+}
+
+function handleMouseDown(event){
+    
+}
+
+function handleMouseUp(event){
+    
+}
+
+function handleMouseMove(event){
+    gunScope.x = stage.mouseX;
+	gunScope.y = stage.mouseY;
+
+    stage.update();
 }
 
 // Note: moved initialisation here to be sure that actors are instantiated.
