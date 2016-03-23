@@ -1,23 +1,23 @@
 var StrictyBoy = (function() {
-    
-    var p = createjs.extend(StrictyBoy, createjs.Container);
-    
+    // Constants
     var defaultSize = {
         width: 20,
         height: 30
     };
-    
     var defaultGunSize = {
         width: 6,
         height: 40
     };
-        
-    var velocity = 10;
+    
+    // Global variables
+    var velocity;
     var goUp;
     var goDown;
     var goRight;
     var goLeft;
     var gun;
+    
+    var p = createjs.extend(StrictyBoy, createjs.Container);
     
     // Constructor
     function StrictyBoy(stageSize, size) {
@@ -26,6 +26,7 @@ var StrictyBoy = (function() {
         this.size = size || { width: defaultSize.width, height: defaultSize.height };
         this._stageSize = stageSize;
         this.goUp = this.goDown = this.goRight = this.goLeft = false;
+        velocity = 10;
     }
     
     // Initialisation
@@ -41,10 +42,13 @@ var StrictyBoy = (function() {
         // Gun         
         this.gun.graphics
             .beginFill("#123456")
-            .drawRect(0, 0, -defaultGunSize.width, -defaultGunSize.height); // Negtives values to put the rotation point on bottom right instead of top left
+            .drawRect(0, 0, defaultGunSize.width, defaultGunSize.height); 
         
-        this.gun.x = this.shape.x + (this.size.width / 2) + (defaultGunSize.width/2);
-        this.gun.y = this.shape.y + (this.size.height / 2) ;    
+        this.gun.x = this.shape.x + (this.size.width / 2);
+        this.gun.y = this.shape.y + (this.size.height / 2);  
+        //Rotation point 
+        this.gun.regX = defaultGunSize.width/2;
+        this.gun.regY = defaultGunSize.height;
     } 
     
     // Starting to move on a direction
@@ -58,6 +62,11 @@ var StrictyBoy = (function() {
     StrictyBoy.prototype.moveLeftStop = function() { goLeft = false; }    
     StrictyBoy.prototype.moveUpStop = function() { goUp = false; }    
     StrictyBoy.prototype.moveDownStop = function() { goDown = false; }
+    
+    // Event fires on mouse movement
+    p.handleMouseMove = function handleMouseMove(event){
+        updateGun(this);
+    }
     
     // Event fires on each tick
     p.tickEvent = function tickEvent(event){
@@ -89,7 +98,7 @@ var StrictyBoy = (function() {
                 this.gun.x += velocity;
             } else {
                 this.shape.x = this._stageSize.width - this.size.width;
-                this.gun.x = this._stageSize.width - (this.size.width / 2) + (defaultGunSize.width/2);
+                this.gun.x = this._stageSize.width - (this.size.width / 2);
             }
         }else if(goLeft){
             if (this.shape.x > velocity){
@@ -97,9 +106,23 @@ var StrictyBoy = (function() {
                 this.gun.x -= velocity;
             } else {
                 this.shape.x = 0; 
-                this.gun.x = (this.size.width / 2) + (defaultGunSize.width/2); 
+                this.gun.x = (this.size.width / 2); 
             }                
-        }                
+        }     
+        
+        // Update gun angle
+        updateGun(this);           
+    }
+    
+    // Update gun rotation
+    function updateGun(currentStrictyBoy){
+        var coteX = stage.mouseX - currentStrictyBoy.gun.x;
+        var coteY = currentStrictyBoy.gun.y - stage.mouseY;
+        var angle = Math.atan(coteX/coteY) * (180 / Math.PI);
+        if (coteY < 0){
+            angle = 180 + angle;
+        }
+        currentStrictyBoy.gun.rotation = angle;
     }
     
     return StrictyBoy;
