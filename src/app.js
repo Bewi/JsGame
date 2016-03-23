@@ -60,7 +60,8 @@ function tickEvent(event){
 }
 
 function handleMouseDown(event){
-    
+    strictyBoy.gun.rotation += 10;
+    stage.update(event);
 }
 
 function handleMouseUp(event){

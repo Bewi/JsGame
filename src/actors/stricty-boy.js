@@ -41,10 +41,10 @@ var StrictyBoy = (function() {
         // Gun         
         this.gun.graphics
             .beginFill("#123456")
-            .drawRect(0, 0, defaultGunSize.width, defaultGunSize.height);     
+            .drawRect(0, 0, -defaultGunSize.width, -defaultGunSize.height); // Negtives values to put the rotation point on bottom right instead of top left
         
-        this.gun.x = this.shapeCenterX - (defaultGunSize.width/2);
-        this.gun.y = this.shapeCenterY - (defaultGunSize.height);    
+        this.gun.x = this.shape.x + (this.size.width / 2) + (defaultGunSize.width/2);
+        this.gun.y = this.shape.y + (this.size.height / 2) ;    
     } 
     
     // Starting to move on a direction
@@ -69,7 +69,7 @@ var StrictyBoy = (function() {
                 this.gun.y -= velocity;
             } else {
                 this.shape.y = 0; 
-                this.gun.y = (this.size.height / 2) - (defaultGunSize.height); 
+                this.gun.y = (this.size.height / 2); 
             }                
         }else if(goDown){
             if (this.shape.y + this.size.height < this._stageSize.height){
@@ -77,7 +77,7 @@ var StrictyBoy = (function() {
                  this.gun.y += velocity;
             } else {
                 this.shape.y = this._stageSize.height - this.size.height;
-                this.gun.y = this._stageSize.height - (this.size.height / 2) - (defaultGunSize.height);
+                this.gun.y = this._stageSize.height - (this.size.height / 2) ;
             }                
         }
         
@@ -89,7 +89,7 @@ var StrictyBoy = (function() {
                 this.gun.x += velocity;
             } else {
                 this.shape.x = this._stageSize.width - this.size.width;
-                this.gun.x = this._stageSize.width - (this.size.width / 2) - (defaultGunSize.width/2);
+                this.gun.x = this._stageSize.width - (this.size.width / 2) + (defaultGunSize.width/2);
             }
         }else if(goLeft){
             if (this.shape.x > velocity){
@@ -97,7 +97,7 @@ var StrictyBoy = (function() {
                 this.gun.x -= velocity;
             } else {
                 this.shape.x = 0; 
-                this.gun.x = (this.size.width / 2) - (defaultGunSize.width/2); 
+                this.gun.x = (this.size.width / 2) + (defaultGunSize.width/2); 
             }                
         }                
     }
