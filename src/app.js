@@ -10,6 +10,9 @@ var gunScope;
 var strictyBoy;
 
 function init() {  
+    // Create js global config
+    createjs.Ticker.setFPS(120);
+    
     // Stage
     stage = new createjs.Stage("demoCanvas");
     stage.canvas.width = stageSize.width;

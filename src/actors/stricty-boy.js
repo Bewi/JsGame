@@ -26,7 +26,7 @@ var StrictyBoy = (function() {
         this.size = size || { width: defaultSize.width, height: defaultSize.height };
         this._stageSize = stageSize;
         this.goUp = this.goDown = this.goRight = this.goLeft = false;
-        velocity = 10;
+        velocity = 100; // Pixels per second
     }
     
     // Initialisation
@@ -71,19 +71,23 @@ var StrictyBoy = (function() {
     // Event fires on each tick
     p.tickEvent = function tickEvent(event){
         
+        // Move velocity pixels per second
+        // (elapsed time MS / 1 second * amount of pixel per second)
+        var movement = event.delta/1000*velocity;
+        
         // Vertical movement
         if(goUp){
-            if (this.shape.y > velocity){
-                this.shape.y -= velocity;
-                this.gun.y -= velocity;
+            if (this.shape.y > movement){
+                this.shape.y -= movement;
+                this.gun.y -= movement;
             } else {
                 this.shape.y = 0; 
                 this.gun.y = (this.size.height / 2); 
             }                
         }else if(goDown){
             if (this.shape.y + this.size.height < this._stageSize.height){
-                 this.shape.y += velocity;
-                 this.gun.y += velocity;
+                 this.shape.y += movement;
+                 this.gun.y += movement;
             } else {
                 this.shape.y = this._stageSize.height - this.size.height;
                 this.gun.y = this._stageSize.height - (this.size.height / 2) ;
@@ -94,16 +98,16 @@ var StrictyBoy = (function() {
         if(goRight){
             if (this.shape.x + this.size.width < this._stageSize.width)
             {
-                this.shape.x += velocity;
-                this.gun.x += velocity;
+                this.shape.x += movement;
+                this.gun.x += movement;
             } else {
                 this.shape.x = this._stageSize.width - this.size.width;
                 this.gun.x = this._stageSize.width - (this.size.width / 2);
             }
         }else if(goLeft){
-            if (this.shape.x > velocity){
-                this.shape.x -= velocity;
-                this.gun.x -= velocity;
+            if (this.shape.x > movement){
+                this.shape.x -= movement;
+                this.gun.x -= movement;
             } else {
                 this.shape.x = 0; 
                 this.gun.x = (this.size.width / 2); 

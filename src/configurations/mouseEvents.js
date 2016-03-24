@@ -11,5 +11,5 @@ function handleMouseMove(event){
 	gunScope.y = stage.mouseY;
 
     strictyBoy.handleMouseMove(event);
-    stage.update();
+    // stage.update();
 }
