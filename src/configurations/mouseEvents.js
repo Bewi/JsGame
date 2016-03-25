@@ -1,5 +1,5 @@
 function handleMouseDown(event){
-    
+    strictyBoy.handleMouseDown(event);
 }
 
 function handleMouseUp(event){

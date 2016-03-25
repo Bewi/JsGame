@@ -4,13 +4,15 @@ var StrictyBoy = (function() {
         width: 20,
         height: 30
     };
+    
     var defaultGunSize = {
         width: 6,
         height: 40
     };
     
     // Global variables
-    var velocity;
+    var STRICTYBOY_SPEED = 100;
+    var PROJECTILE_SPEED = 400;
     var goUp;
     var goDown;
     var goRight;
@@ -18,15 +20,36 @@ var StrictyBoy = (function() {
     var gun;
     
     var p = createjs.extend(StrictyBoy, createjs.Container);
+
+    // Event fires on mouse movement
+    p.handleMouseMove = function handleMouseMove(event){
+        this.updateGun();
+    }
+    
+    p.handleMouseDown = function (event) {
+        this.shoot();
+    }
+    
+    // Event fires on each tick
+    p.tickEvent = function tickEvent(event){    
+        // Handle keys and move the boy
+        this.handleMoves(event);
+        
+        // Update gun rotation
+        this.updateGun();    
+        
+        // Update projectiles
+        this.updateProjectiles(event);
+    }
     
     // Constructor
     function StrictyBoy(stageSize, size) {
         this.shape = new createjs.Shape();
         this.gun = new createjs.Shape();
+        this.projectiles = [];
         this.size = size || { width: defaultSize.width, height: defaultSize.height };
         this._stageSize = stageSize;
         this.goUp = this.goDown = this.goRight = this.goLeft = false;
-        velocity = 100; // Pixels per second
     }
     
     // Initialisation
@@ -51,6 +74,7 @@ var StrictyBoy = (function() {
         this.gun.regY = defaultGunSize.height;
     } 
     
+    
     // Starting to move on a direction
     StrictyBoy.prototype.moveRight = function() { goRight = true; }    
     StrictyBoy.prototype.moveLeft = function() { goLeft = true; }    
@@ -63,17 +87,8 @@ var StrictyBoy = (function() {
     StrictyBoy.prototype.moveUpStop = function() { goUp = false; }    
     StrictyBoy.prototype.moveDownStop = function() { goDown = false; }
     
-    // Event fires on mouse movement
-    p.handleMouseMove = function handleMouseMove(event){
-        updateGun(this);
-    }
-    
-    // Event fires on each tick
-    p.tickEvent = function tickEvent(event){
-        
-        // Move velocity pixels per second
-        // (elapsed time MS / 1 second * amount of pixel per second)
-        var movement = event.delta/1000*velocity;
+    StrictyBoy.prototype.handleMoves = function(event) {
+        var movement = getActualVelocity(event.delta, STRICTYBOY_SPEED);
         
         // Vertical movement
         if(goUp){
@@ -113,20 +128,59 @@ var StrictyBoy = (function() {
                 this.gun.x = (this.size.width / 2); 
             }                
         }     
-        
-        // Update gun angle
-        updateGun(this);           
     }
     
     // Update gun rotation
-    function updateGun(currentStrictyBoy){
-        var coteX = stage.mouseX - currentStrictyBoy.gun.x;
-        var coteY = currentStrictyBoy.gun.y - stage.mouseY;
-        var angle = Math.atan(coteX/coteY) * (180 / Math.PI);
+    StrictyBoy.prototype.updateGun = function() {
+        var coteX = stage.mouseX - this.gun.x;
+        var coteY = this.gun.y - stage.mouseY;
+        var rotation = Math.atan(coteX/coteY) * (180 / Math.PI);
+        
         if (coteY < 0){
-            angle = 180 + angle;
+            rotation = 180 + rotation;
         }
-        currentStrictyBoy.gun.rotation = angle;
+        
+        this.gun.rotation = rotation;
+    }
+    
+    // update projectiles
+    StrictyBoy.prototype.updateProjectiles = function(event) {    
+        var actualVelocity = getActualVelocity(event.delta, PROJECTILE_SPEED);    
+        for(var i = 0; i < this.projectiles.length; i++){
+            var projectile = this.projectiles[i];
+            
+            // Note: convert to radian as Math.sin expect radian and not degrees...
+            var radianAngle = trigo.angleToRadian(projectile.rotation);
+            projectile.x += Math.sin(radianAngle) * actualVelocity;
+            projectile.y -= Math.cos(radianAngle) * actualVelocity;
+        }
+    }
+    
+    // KILL THEM ALL
+    StrictyBoy.prototype.shoot = function() {        
+        var shape = new createjs.Shape();
+        shape.graphics
+            .beginFill("#FF0000")
+            .drawRect(0, 0, 3, 3);
+            
+        shape.x = this.gun.x;
+        shape.y = this.gun.y;
+        // x & x at end of gun
+        var radianAngle = trigo.angleToRadian(this.gun.rotation);
+        var height = this.gun.graphics.command.h;
+        shape.x += (Math.sin(radianAngle) * height);
+        shape.y -= (Math.cos(radianAngle) * height);
+        
+        shape.rotation = this.gun.rotation;
+        
+        this.projectiles.push(shape);
+        stage.addChild(shape);
+    }
+    
+    function getActualVelocity(delta, speed) {
+        // Move velocity pixels per second
+        // (elapsed time MS / 1 second * amount of pixel per second)
+        return delta/1000*speed;
     }
     
     return StrictyBoy;
