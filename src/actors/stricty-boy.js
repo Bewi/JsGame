@@ -145,7 +145,8 @@ var StrictyBoy = (function() {
     
     // update projectiles
     StrictyBoy.prototype.updateProjectiles = function(event) {    
-        var actualVelocity = getActualVelocity(event.delta, PROJECTILE_SPEED);    
+        var actualVelocity = getActualVelocity(event.delta, PROJECTILE_SPEED); 
+        var projectilesToBeDeleted = [];   
         for(var i = 0; i < this.projectiles.length; i++){
             var projectile = this.projectiles[i];
             
@@ -153,6 +154,17 @@ var StrictyBoy = (function() {
             var radianAngle = trigo.angleToRadian(projectile.rotation);
             projectile.x += Math.sin(radianAngle) * actualVelocity;
             projectile.y -= Math.cos(radianAngle) * actualVelocity;
+            
+            // Every projectile out of bounds can be deleted
+            if ((projectile.y < 0 || projectile.y > stageSize.height) || (projectile.x < 0 || projectile.x > stageSize.width)){
+                projectilesToBeDeleted.push(i);
+            }            
+        }
+        
+        // Every projectile out of bounds is deleted and remove from the stage
+        for(var i = projectilesToBeDeleted.length - 1; i >= 0; i--){
+            var aDeletedProjectile = this.projectiles.splice(projectilesToBeDeleted[i],1);
+            stage.removeChild(aDeletedProjectile[0]);
         }
     }
     
