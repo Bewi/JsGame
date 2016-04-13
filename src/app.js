@@ -8,12 +8,14 @@ var stageSize = {
 var stage;
 var gunScope;
 var strictyBoy;
+var sky;
 var ground;
 var loader;
 
 function init() {
     
     manifest = [
+		{src: "sky.png", id: "sky"},
 		{src: "ground.png", id: "ground"},
 	];
     
@@ -30,6 +32,11 @@ function handleComplete() {
     stage = new createjs.Stage("demoCanvas");
     stage.canvas.width = stageSize.width;
     stage.canvas.height = stageSize.height;
+    
+    // Sky
+    sky = new Sky(stageSize);
+    sky.init();
+    stage.addChild(sky.shape);     
     
     // Ground
     ground = new Ground(stageSize);
