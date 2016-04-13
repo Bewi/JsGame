@@ -8,7 +8,6 @@ var stageSize = {
 var stage;
 var gunScope;
 var strictyBoy;
-var sky;
 var world;
 var loader;
 
@@ -33,12 +32,7 @@ function handleComplete() {
     stage = new createjs.Stage("demoCanvas");
     stage.canvas.width = stageSize.width;
     stage.canvas.height = stageSize.height;
-    
-    // Sky
-    sky = new Sky(stageSize);
-    sky.init();
-    stage.addChild(sky.shape);     
-    
+        
     // World
     world = new World(stageSize);
     world.init();
