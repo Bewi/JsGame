@@ -9,8 +9,20 @@ var stage;
 var gunScope;
 var strictyBoy;
 var ground;
+var loader;
 
-function init() {  
+function init() {
+    
+    manifest = [
+		{src: "ground.png", id: "ground"},
+	];
+    
+    loader = new createjs.LoadQueue(false);
+    loader.addEventListener("complete", handleComplete);
+    loader.loadManifest(manifest, true, "art/");
+}
+
+function handleComplete() {  
     // Create js global config
     createjs.Ticker.setFPS(120);
     

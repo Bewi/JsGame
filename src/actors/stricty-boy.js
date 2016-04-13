@@ -61,7 +61,7 @@ var StrictyBoy = (function() {
                 
         this.shape.x = (this._stageSize.width / 2) - (this.size.width / 2);
         // TODO: We should take the ground height into account ..
-        this.shape.y =  this._stageSize.height - this.size.height - 15;    
+        this.shape.y =  this._stageSize.height - this.size.height - 30;    
             
         // Gun         
         this.gun.graphics
