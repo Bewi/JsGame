@@ -2,12 +2,13 @@
 var stageSize = {
     width: 500,
     height: 400
-}
+};
 
 // Global variables
 var stage;
 var gunScope;
 var strictyBoy;
+var ground;
 
 function init() {  
     // Create js global config
@@ -17,6 +18,11 @@ function init() {
     stage = new createjs.Stage("demoCanvas");
     stage.canvas.width = stageSize.width;
     stage.canvas.height = stageSize.height;
+    
+    // Ground
+    ground = new Ground(stageSize);
+    ground.init();
+    stage.addChild(ground.shape);
     
     // StrictyBoy
     strictyBoy = new StrictyBoy(stageSize);

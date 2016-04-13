@@ -40,7 +40,7 @@ var StrictyBoy = (function() {
         
         // Update projectiles
         this.updateProjectiles(event);
-    }
+    };
     
     // Constructor
     function StrictyBoy(stageSize, size) {
@@ -177,7 +177,7 @@ var StrictyBoy = (function() {
             
         shape.x = this.gun.x;
         shape.y = this.gun.y;
-        // x & x at end of gun
+        // x & y at end of gun
         var radianAngle = trigo.angleToRadian(this.gun.rotation);
         var height = this.gun.graphics.command.h;
         shape.x += (Math.sin(radianAngle) * height);
@@ -187,7 +187,7 @@ var StrictyBoy = (function() {
         
         this.projectiles.push(shape);
         stage.addChild(shape);
-    }
+    };
     
     function getActualVelocity(delta, speed) {
         // Move velocity pixels per second

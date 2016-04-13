@@ -17,7 +17,8 @@ function initActionsKeyMap() {
             actor: strictyBoy,
             action: strictyBoy.moveDown
         }
-    }
+    };
+    
     actionsKeyUpMap = {
         37: { //KEYCODE_LEFT
             actor: strictyBoy,
@@ -35,7 +36,7 @@ function initActionsKeyMap() {
             actor: strictyBoy,
             action: strictyBoy.moveDownStop
         }
-    }
+    };
 }
 
 function handleKeysDown(event) {
