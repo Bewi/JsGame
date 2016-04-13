@@ -9,7 +9,7 @@ var stage;
 var gunScope;
 var strictyBoy;
 var sky;
-var ground;
+var world;
 var loader;
 
 function init() {
@@ -17,6 +17,7 @@ function init() {
     manifest = [
 		{src: "sky.png", id: "sky"},
 		{src: "ground.png", id: "ground"},
+		{src: "platform.png", id: "platform"},
 	];
     
     loader = new createjs.LoadQueue(false);
@@ -38,10 +39,12 @@ function handleComplete() {
     sky.init();
     stage.addChild(sky.shape);     
     
-    // Ground
-    ground = new Ground(stageSize);
-    ground.init();
-    stage.addChild(ground.shape);
+    // World
+    world = new World(stageSize);
+    world.init();
+    for (var i = 0; i < world.shapes.length; i++) {
+        stage.addChild(world.shapes[i]);
+    }
     
     // StrictyBoy
     strictyBoy = new StrictyBoy(stageSize);

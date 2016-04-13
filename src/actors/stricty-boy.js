@@ -24,11 +24,11 @@ var StrictyBoy = (function() {
     // Event fires on mouse movement
     p.handleMouseMove = function handleMouseMove(event){
         this.updateGun();
-    }
+    };
     
     p.handleMouseDown = function (event) {
         this.shoot();
-    }
+    };
     
     // Event fires on each tick
     p.tickEvent = function tickEvent(event){    
@@ -56,7 +56,7 @@ var StrictyBoy = (function() {
     StrictyBoy.prototype.init = function() {
         // StrictyBoy
         this.shape.graphics
-            .beginFill("DeepSkyBlue")
+            .beginFill("Yellow")
             .drawRect(0, 0, this.size.width, this.size.height);
                 
         this.shape.x = (this._stageSize.width / 2) - (this.size.width / 2);
@@ -65,7 +65,7 @@ var StrictyBoy = (function() {
             
         // Gun         
         this.gun.graphics
-            .beginFill("#123456")
+            .beginFill("Yellow")
             .drawRect(0, 0, defaultGunSize.width, defaultGunSize.height); 
         
         this.gun.x = this.shape.x + (this.size.width / 2);
