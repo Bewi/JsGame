@@ -1,7 +1,7 @@
 // Constants
 var stageSize = {
-    width: 500,
-    height: 400
+    width: 1500,
+    height: 600
 };
 
 // Global variables

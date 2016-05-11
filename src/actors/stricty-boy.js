@@ -11,8 +11,8 @@ var StrictyBoy = (function() {
     };
     
     // Global variables
-    var STRICTYBOY_SPEED = 100;
-    var PROJECTILE_SPEED = 400;
+    var STRICTYBOY_SPEED = 200;
+    var PROJECTILE_SPEED = 800;
     var goUp;
     var goDown;
     var goRight;
@@ -174,7 +174,7 @@ var StrictyBoy = (function() {
         var shape = new createjs.Shape();
         shape.graphics
             .beginFill("#FF0000")
-            .drawRect(0, 0, 3, 3);
+            .drawRect(0, 0, 5, 9);
             
         shape.x = this.gun.x;
         shape.y = this.gun.y;
