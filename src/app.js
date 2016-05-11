@@ -3,6 +3,7 @@ var stageSize = {
     width: 1500,
     height: 600
 };
+var gravityIncrement = 0.05;
 
 // Global variables
 var stage;
@@ -10,6 +11,7 @@ var gunScope;
 var strictyBoy;
 var world;
 var loader;
+var groundHeight;
 
 function init() {
     

@@ -18,6 +18,8 @@ var StrictyBoy = (function() {
     var goRight;
     var goLeft;
     var gun;
+    var shapeCanJump = true;
+    var gravityValue = 0;
     
     var p = createjs.extend(StrictyBoy, createjs.Container);
 
@@ -60,8 +62,7 @@ var StrictyBoy = (function() {
             .drawRect(0, 0, this.size.width, this.size.height);
                 
         this.shape.x = (this._stageSize.width / 2) - (this.size.width / 2);
-        // TODO: We should take the ground height into account ..
-        this.shape.y =  this._stageSize.height - this.size.height - 30;    
+        this.shape.y =  this._stageSize.height - this.size.height - groundHeight;    
             
         // Gun         
         this.gun.graphics
@@ -81,54 +82,60 @@ var StrictyBoy = (function() {
     StrictyBoy.prototype.moveLeft = function() { goLeft = true; }    
     StrictyBoy.prototype.moveUp = function() { goUp = true; }    
     StrictyBoy.prototype.moveDown = function() { goDown = true; }
+    StrictyBoy.prototype.jump = function() { goUp = true; }
     
     // Stopping to move on a direction
     StrictyBoy.prototype.moveRightStop = function() { goRight = false; }    
     StrictyBoy.prototype.moveLeftStop = function() { goLeft = false; }    
-    StrictyBoy.prototype.moveUpStop = function() { goUp = false; }    
+    StrictyBoy.prototype.moveUpStop = function() { goUp = false;  shapeCanJump = false;}    
     StrictyBoy.prototype.moveDownStop = function() { goDown = false; }
-    
+        
     StrictyBoy.prototype.handleMoves = function(event) {
         var movement = getActualVelocity(event.delta, STRICTYBOY_SPEED);
         
         // Vertical movement
-        if(goUp){
+        if(goUp && shapeCanJump){
             if (this.shape.y > movement){
-                this.shape.y -= movement;
-                this.gun.y -= movement;
+                this.shape.y -= movement * 2.5;
             } else {
                 this.shape.y = 0; 
-                this.gun.y = (this.size.height / 2); 
-            }                
+            }               
         }else if(goDown){
-            if (this.shape.y + this.size.height < this._stageSize.height){
+            if (this.shape.y + this.size.height < this._stageSize.height - groundHeight){
                  this.shape.y += movement;
-                 this.gun.y += movement;
             } else {
-                this.shape.y = this._stageSize.height - this.size.height;
-                this.gun.y = this._stageSize.height - (this.size.height / 2) ;
+                this.shape.y = this._stageSize.height - this.size.height - groundHeight;
             }                
         }
         
         // Horizontal movement
         if(goRight){
-            if (this.shape.x + this.size.width < this._stageSize.width)
-            {
+            if (this.shape.x + this.size.width < this._stageSize.width){
                 this.shape.x += movement;
-                this.gun.x += movement;
             } else {
                 this.shape.x = this._stageSize.width - this.size.width;
-                this.gun.x = this._stageSize.width - (this.size.width / 2);
             }
         }else if(goLeft){
             if (this.shape.x > movement){
                 this.shape.x -= movement;
-                this.gun.x -= movement;
             } else {
                 this.shape.x = 0; 
-                this.gun.x = (this.size.width / 2); 
             }                
-        }     
+        }
+        
+        //Gravity
+        if (this.shape.y + this.size.height < this._stageSize.height - groundHeight){
+            this.shape.y = this.shape.y + gravityValue;
+            gravityValue += gravityIncrement;
+        }else{
+            gravityValue = 0;
+            shapeCanJump = true;
+            goUp = false;
+        }
+        
+        // Update gun position
+        this.gun.x = this.shape.x + (this.size.width / 2);
+        this.gun.y = this.shape.y + (this.size.height / 2);   
     }
     
     // Update gun rotation
