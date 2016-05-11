@@ -2,14 +2,29 @@
 var stageSize = {
     width: 500,
     height: 400
-}
+};
 
 // Global variables
 var stage;
 var gunScope;
 var strictyBoy;
+var world;
+var loader;
 
-function init() {  
+function init() {
+    
+    manifest = [
+		{src: "sky.png", id: "sky"},
+		{src: "ground.png", id: "ground"},
+		{src: "platform.png", id: "platform"},
+	];
+    
+    loader = new createjs.LoadQueue(false);
+    loader.addEventListener("complete", handleComplete);
+    loader.loadManifest(manifest, true, "art/");
+}
+
+function handleComplete() {  
     // Create js global config
     createjs.Ticker.setFPS(120);
     
@@ -17,6 +32,13 @@ function init() {
     stage = new createjs.Stage("demoCanvas");
     stage.canvas.width = stageSize.width;
     stage.canvas.height = stageSize.height;
+        
+    // World
+    world = new World(stageSize);
+    world.init();
+    for (var i = 0; i < world.shapes.length; i++) {
+        stage.addChild(world.shapes[i]);
+    }
     
     // StrictyBoy
     strictyBoy = new StrictyBoy(stageSize);

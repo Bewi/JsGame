@@ -24,11 +24,11 @@ var StrictyBoy = (function() {
     // Event fires on mouse movement
     p.handleMouseMove = function handleMouseMove(event){
         this.updateGun();
-    }
+    };
     
     p.handleMouseDown = function (event) {
         this.shoot();
-    }
+    };
     
     // Event fires on each tick
     p.tickEvent = function tickEvent(event){    
@@ -40,7 +40,7 @@ var StrictyBoy = (function() {
         
         // Update projectiles
         this.updateProjectiles(event);
-    }
+    };
     
     // Constructor
     function StrictyBoy(stageSize, size) {
@@ -56,15 +56,16 @@ var StrictyBoy = (function() {
     StrictyBoy.prototype.init = function() {
         // StrictyBoy
         this.shape.graphics
-            .beginFill("DeepSkyBlue")
+            .beginFill("Yellow")
             .drawRect(0, 0, this.size.width, this.size.height);
                 
         this.shape.x = (this._stageSize.width / 2) - (this.size.width / 2);
-        this.shape.y =  this._stageSize.height - this.size.height - 10;    
+        // TODO: We should take the ground height into account ..
+        this.shape.y =  this._stageSize.height - this.size.height - 30;    
             
         // Gun         
         this.gun.graphics
-            .beginFill("#123456")
+            .beginFill("Yellow")
             .drawRect(0, 0, defaultGunSize.width, defaultGunSize.height); 
         
         this.gun.x = this.shape.x + (this.size.width / 2);
@@ -177,7 +178,7 @@ var StrictyBoy = (function() {
             
         shape.x = this.gun.x;
         shape.y = this.gun.y;
-        // x & x at end of gun
+        // x & y at end of gun
         var radianAngle = trigo.angleToRadian(this.gun.rotation);
         var height = this.gun.graphics.command.h;
         shape.x += (Math.sin(radianAngle) * height);
@@ -187,7 +188,7 @@ var StrictyBoy = (function() {
         
         this.projectiles.push(shape);
         stage.addChild(shape);
-    }
+    };
     
     function getActualVelocity(delta, speed) {
         // Move velocity pixels per second
