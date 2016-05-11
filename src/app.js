@@ -71,4 +71,3 @@ function tickEvent(event){
     strictyBoy.tickEvent(event);
     stage.update(event);
 }
-
