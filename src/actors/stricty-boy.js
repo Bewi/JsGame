@@ -18,6 +18,7 @@ var StrictyBoy = (function() {
     var goRight;
     var goLeft;
     var gun;
+    var shapeYInitialValue;
     var shapeCanJump = true;
     var gravityValue = 0;
     
@@ -63,6 +64,7 @@ var StrictyBoy = (function() {
                 
         this.shape.x = (this._stageSize.width / 2) - (this.size.width / 2);
         this.shape.y =  this._stageSize.height - this.size.height - groundHeight;    
+        shapeYInitialValue = this.shape.y;
             
         // Gun         
         this.gun.graphics
@@ -127,10 +129,15 @@ var StrictyBoy = (function() {
         if (this.shape.y + this.size.height < this._stageSize.height - groundHeight){
             this.shape.y = this.shape.y + gravityValue;
             gravityValue += gravityIncrement;
+            if (this.shape.y > shapeYInitialValue){
+                this.shape.y = shapeYInitialValue;
+                gravityValue = 0;
+                shapeCanJump = true;
+            }
         }else{
+            this.shape.y = shapeYInitialValue;
             gravityValue = 0;
             shapeCanJump = true;
-            goUp = false;
         }
         
         // Update gun position
