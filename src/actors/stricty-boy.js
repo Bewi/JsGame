@@ -17,6 +17,7 @@ var StrictyBoy = (function() {
     var goDown;
     var goRight;
     var goLeft;
+    var jump;
     var gun;
     var shapeYInitialValue;
     var shapeCanJump = true;
@@ -84,7 +85,7 @@ var StrictyBoy = (function() {
     StrictyBoy.prototype.moveLeft = function() { goLeft = true; }    
     StrictyBoy.prototype.moveUp = function() { goUp = true; }    
     StrictyBoy.prototype.moveDown = function() { goDown = true; }
-    StrictyBoy.prototype.jump = function() { goUp = true; }
+    StrictyBoy.prototype.jump = function() { jump = true; }
     
     // Stopping to move on a direction
     StrictyBoy.prototype.moveRightStop = function() { goRight = false; }    
@@ -96,7 +97,7 @@ var StrictyBoy = (function() {
         var movement = getActualVelocity(event.delta, STRICTYBOY_SPEED);
         
         // Vertical movement
-        if(goUp && shapeCanJump){
+        if((goUp || jump) && shapeCanJump){
             if (this.shape.y > movement){
                 this.shape.y -= movement * 2.5;
             } else {
@@ -133,11 +134,13 @@ var StrictyBoy = (function() {
                 this.shape.y = shapeYInitialValue;
                 gravityValue = 0;
                 shapeCanJump = true;
+                jump = false;
             }
         }else{
             this.shape.y = shapeYInitialValue;
             gravityValue = 0;
             shapeCanJump = true;
+            jump = false;
         }
         
         // Update gun position
