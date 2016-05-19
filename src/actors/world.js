@@ -32,6 +32,7 @@ var World = (function() {
         
         shape.tileW = groundImg.width;
         shape.y = stageSize.height - _groundHeight;
+        groundHeight = _groundHeight/2;
     }
     
     function initSky(shape, stageSize) {
