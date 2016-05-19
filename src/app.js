@@ -3,7 +3,7 @@ var stageSize = {
     width: 1500,
     height: 600
 };
-var gravityIncrement = 0.05;
+var gravityIncrement = 2;
 
 // Global variables
 var stage;
